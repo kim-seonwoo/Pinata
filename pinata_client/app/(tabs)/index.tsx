@@ -9,11 +9,11 @@ import {
   User,
   GoogleSigninButton,
 } from "@react-native-google-signin/google-signin";
+import { GOOGLE_WEB_CLIENT_ID } from "@env";
 
-export default function TabOneScreen() {
+export default function LoginView() {
   GoogleSignin.configure({
-    webClientId:
-      "921779819892-panh35g050pvvugg38snv788s0nnpiha.apps.googleusercontent.com",
+    webClientId: GOOGLE_WEB_CLIENT_ID, // client ID of type WEB for your server (needed to verify user ID and offline access)
   });
   const signIn = async () => {
     try {
@@ -21,7 +21,8 @@ export default function TabOneScreen() {
         showPlayServicesUpdateDialog: true,
       });
       const response = await GoogleSignin.signIn();
-      const googleCredential = auth;
+      const idToken = response.data?.idToken ?? null;
+      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
     } catch (error) {
       if (isErrorWithCode(error)) {
         switch (error.code) {
