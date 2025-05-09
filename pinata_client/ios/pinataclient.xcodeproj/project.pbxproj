@@ -13,6 +13,7 @@
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		BBD6C9A47B05A22A2580F87D /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 7D3F77E6ECF09EFE20E276D3 /* PrivacyInfo.xcprivacy */; };
+		DC68189A849B43B88950CB08 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A2C0A995474C4AB4A7985E72 /* GoogleService-Info.plist */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
@@ -23,6 +24,7 @@
 		28E4926C1B797F73005EF997 /* Pods_pinataclient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_pinataclient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E09D3CE048F136A4312A81F /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-pinataclient/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		7D3F77E6ECF09EFE20E276D3 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = pinataclient/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		A2C0A995474C4AB4A7985E72 /* GoogleService-Info.plist */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "pinataclient/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = pinataclient/SplashScreen.storyboard; sourceTree = "<group>"; };
 		B72F9D9BE488CB766E4AC104 /* Pods-pinataclient.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pinataclient.release.xcconfig"; path = "Target Support Files/Pods-pinataclient/Pods-pinataclient.release.xcconfig"; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
@@ -54,6 +56,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
 				7D3F77E6ECF09EFE20E276D3 /* PrivacyInfo.xcprivacy */,
+				A2C0A995474C4AB4A7985E72 /* GoogleService-Info.plist */,
 			);
 			name = pinataclient;
 			sourceTree = "<group>";
@@ -198,6 +201,7 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
 				BBD6C9A47B05A22A2580F87D /* PrivacyInfo.xcprivacy in Resources */,
+				DC68189A849B43B88950CB08 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -513,7 +517,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.anonymous.pinata-client";
-				PRODUCT_NAME = pinataclient;
+				PRODUCT_NAME = "pinataclient";
 				SWIFT_OBJC_BRIDGING_HEADER = "pinataclient/pinataclient-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -544,7 +548,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.anonymous.pinata-client";
-				PRODUCT_NAME = pinataclient;
+				PRODUCT_NAME = "pinataclient";
 				SWIFT_OBJC_BRIDGING_HEADER = "pinataclient/pinataclient-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
