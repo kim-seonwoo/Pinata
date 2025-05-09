@@ -1,0 +1,6 @@
+# .prettierignore
+node_modules
+build
+dist
+.expo
+.expo-shared

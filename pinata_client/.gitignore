@@ -1,0 +1,44 @@
+# ✅ 기본 문서 참고
+# Learn more: https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
+
+# ✅ dependencies
+node_modules/
+
+# ✅ Expo
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+
+# ✅ Firebase / Google services
+GoogleService-Info.plist
+google-services.json
+
+# ✅ Native keys & secrets
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.pem
+
+# ✅ Metro bundler
+.metro-health-check*
+
+# ✅ Debug logs
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# ✅ macOS
+.DS_Store
+
+# ✅ Local env config
+.env
+.env*.local
+
+# ✅ TypeScript
+*.tsbuildinfo
+
+# ✅ End of expo-cli generated section
