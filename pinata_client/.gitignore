@@ -42,3 +42,4 @@ yarn-error.*
 *.tsbuildinfo
 
 # ✅ End of expo-cli generated section
+echo ".DS_Store" >> .gitignore
