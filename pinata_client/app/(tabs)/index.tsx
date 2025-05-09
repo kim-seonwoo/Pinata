@@ -9,11 +9,11 @@ import {
   User,
   GoogleSigninButton,
 } from "@react-native-google-signin/google-signin";
-import { GOOGLE_WEB_CLIENT_ID } from "@env";
+// import { GOOGLE_WEB_CLIENT_ID } from "@env";
 
 export default function LoginView() {
   GoogleSignin.configure({
-    webClientId: GOOGLE_WEB_CLIENT_ID, // client ID of type WEB for your server (needed to verify user ID and offline access)
+    webClientId: "", // client ID of type WEB for your server (needed to verify user ID and offline access)
   });
   const signIn = async () => {
     try {
