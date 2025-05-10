@@ -1,42 +1,51 @@
-import { StyleSheet } from "react-native";
-import { Text, View } from "@/components/Themed";
+import { StyleSheet, Text, View } from "react-native";
 import auth from "@react-native-firebase/auth";
 import {
   GoogleSignin,
   isErrorWithCode,
-  isSuccessResponse,
   statusCodes,
   User,
   GoogleSigninButton,
 } from "@react-native-google-signin/google-signin";
-// import { GOOGLE_WEB_CLIENT_ID } from "@env";
 
 export default function LoginView() {
   GoogleSignin.configure({
-    webClientId: "", // client ID of type WEB for your server (needed to verify user ID and offline access)
+    webClientId:
+      "921779819892-panh35g050pvvugg38snv788s0nnpiha.apps.googleusercontent.com",
   });
+
   const signIn = async () => {
     try {
       await GoogleSignin.hasPlayServices({
         showPlayServicesUpdateDialog: true,
       });
-      const response = await GoogleSignin.signIn();
-      const idToken = response.data?.idToken ?? null;
+      const userInfo = await GoogleSignin.signIn();
+      const idToken = userInfo.data?.idToken;
+      if (!idToken) {
+        throw new Error("Failed to retrieve idToken from userInfo.");
+      }
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+
+      // Firebase 인증
+      await auth().signInWithCredential(googleCredential);
+
+      // 콘솔 출력
+      console.log("로그인 성공");
+      console.log("사용자 정보:", userInfo);
     } catch (error) {
       if (isErrorWithCode(error)) {
         switch (error.code) {
           case statusCodes.IN_PROGRESS:
-            // operation (eg. sign in) already in progress
+            console.warn("로그인 진행 중입니다.");
             break;
           case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
-            // Android only, play services not available or outdated
+            console.warn("Play Services를 사용할 수 없습니다.");
             break;
           default:
-          // some other error happened
+            console.warn("알 수 없는 오류:", error.message);
         }
       } else {
-        // an error that's not related to google sign in occurred
+        console.error("구글 로그인 오류:", error);
       }
     }
   };
@@ -48,7 +57,7 @@ export default function LoginView() {
         style={{ width: 192, height: 48 }}
         size={GoogleSigninButton.Size.Wide}
         color={GoogleSigninButton.Color.Dark}
-        onPress={() => signIn()}
+        onPress={signIn}
         disabled={false}
       />
     </View>
@@ -71,6 +80,3 @@ const styles = StyleSheet.create({
     width: "80%",
   },
 });
-function setState(arg0: { userInfo: User }) {
-  throw new Error("Function not implemented.");
-}
