@@ -31,6 +31,12 @@
           <string>com.anonymous.pinata-client</string>
         </array>
       </dict>
+      <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>com.googleusercontent.apps.921779819892-ajcg7ge1qtkg3ohea9lt0c6j5negbop7</string>
+        </array>
+      </dict>
     </array>
     <key>CFBundleVersion</key>
     <string>1</string>
