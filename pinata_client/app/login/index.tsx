@@ -10,8 +10,7 @@ import {
 
 export default function LoginView() {
   GoogleSignin.configure({
-    webClientId:
-      "921779819892-panh35g050pvvugg38snv788s0nnpiha.apps.googleusercontent.com",
+    webClientId: process.env.EXPO_PUBLIC_WEB_CLIENT_ID,
   });
 
   const signIn = async () => {
