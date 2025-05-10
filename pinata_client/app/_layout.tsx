@@ -18,7 +18,7 @@ export default function RootLayout() {
   useEffect(() => {
     if (isLoggedIn === null) return;
     if (isLoggedIn) {
-      router.replace("/login"); // ✅ 디렉토리 기준 라우트
+      router.replace("/home"); // ✅ 디렉토리 기준 라우트
     } else {
       router.replace("/login");
     }
