@@ -1,13 +1,16 @@
 import { View, Text, Button, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import { useAuthStore } from "@/stores/authStore"; // zustand에서 유저 상태 가져오기
+import { useGoogleAuth } from "@/hooks/useGoogleLogin";
+import CommonButton from "@/components/CommonButton";
+import BaseLayout from "@/components/ScreenContainer";
 
 export default function HomeView() {
   const router = useRouter();
   const { user } = useAuthStore();
-
+  const { logout } = useGoogleAuth();
   return (
-    <View style={styles.container}>
+    <BaseLayout>
       <Text style={styles.title}>홈 화면입니다</Text>
 
       {user && (
@@ -17,19 +20,25 @@ export default function HomeView() {
         </View>
       )}
 
-      <Button title="게임으로 이동" onPress={() => router.push("/game")} />
-    </View>
+      <CommonButton
+        title="게임으로 이동"
+        onPress={() => router.push("/game")}
+        size="large"
+        buttonStyle={{ marginBottom: 12 }}
+      />
+      <CommonButton
+        title="로그아웃"
+        onPress={() => {
+          logout();
+        }}
+        size="large"
+        buttonStyle={{ marginBottom: 12 }}
+      />
+    </BaseLayout>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 24,
-    backgroundColor: "#fff",
-  },
   title: {
     fontSize: 24,
     fontWeight: "bold",

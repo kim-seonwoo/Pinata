@@ -64,3 +64,13 @@ export const signInWithGoogle = async (): Promise<User> => {
     throw error;
   }
 };
+
+export const signOutFromGoogle = async () => {
+  try {
+    await auth().signOut();
+    console.log("✅ Firebase에서 로그아웃 성공");
+  } catch (error) {
+    console.error("❌ 로그아웃 실패:", error);
+    throw error;
+  }
+};

@@ -7,7 +7,7 @@ export default function GameView() {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>게임 화면입니다</Text>
-      <Button title="게임 종료하기" onPress={() => router.replace("/home")} />
+      <Button title="게임 종료하기" onPress={() => router.back()} />
     </View>
   );
 }
