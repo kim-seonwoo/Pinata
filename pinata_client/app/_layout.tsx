@@ -1,28 +1,31 @@
-// app/_layout.tsx
-import { Slot, Stack } from "expo-router";
-import { useEffect, useState } from "react";
-import { useRouter } from "expo-router";
+import { Slot } from "expo-router";
+import { useEffect } from "react";
 import auth from "@react-native-firebase/auth";
+import { useRouter } from "expo-router";
+import { useAuthStore } from "@/stores/authStore";
 
 export default function RootLayout() {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
   const router = useRouter();
+  const setUser = useAuthStore((state) => state.setUser);
+  const clearUser = useAuthStore((state) => state.clearUser);
 
   useEffect(() => {
-    const unsubscribe = auth().onAuthStateChanged((user) => {
-      setIsLoggedIn(!!user);
+    const unsubscribe = auth().onAuthStateChanged((firebaseUser) => {
+      if (firebaseUser) {
+        setUser({
+          id: firebaseUser.uid,
+          name: firebaseUser.displayName ?? "",
+          email: firebaseUser.email ?? "",
+          ball: 0,
+        });
+        router.replace("/login");
+      } else {
+        clearUser();
+        router.replace("/home");
+      }
     });
     return unsubscribe;
   }, []);
-
-  useEffect(() => {
-    if (isLoggedIn === null) return;
-    if (isLoggedIn) {
-      router.replace("/home"); // ✅ 디렉토리 기준 라우트
-    } else {
-      router.replace("/login");
-    }
-  }, [isLoggedIn]);
 
   return <Slot />;
 }
