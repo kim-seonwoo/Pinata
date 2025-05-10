@@ -1,4 +1,5 @@
 import auth from "@react-native-firebase/auth";
+import firestore from "@react-native-firebase/firestore";
 import {
   GoogleSignin,
   statusCodes,
@@ -10,7 +11,7 @@ GoogleSignin.configure({
   webClientId: process.env.EXPO_PUBLIC_WEB_CLIENT_ID,
 });
 
-export const signInWithGoogle = async () => {
+export const signInWithGoogle = async (): Promise<User> => {
   try {
     await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
     const userInfo = await GoogleSignin.signIn();
@@ -19,16 +20,32 @@ export const signInWithGoogle = async () => {
 
     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
     const userCredential = await auth().signInWithCredential(googleCredential);
-
     const firebaseUser = userCredential.user;
-    const user: User = {
-      id: firebaseUser.uid,
-      name: firebaseUser.displayName ?? "",
-      email: firebaseUser.email ?? "",
-      ball: 0,
-    };
-    console.log(user);
-    return user;
+
+    const uid = firebaseUser.uid;
+    const email = firebaseUser.email ?? "";
+    const name = firebaseUser.displayName ?? "";
+
+    const userRef = firestore().collection("users").doc(uid);
+    const snapshot = await userRef.get();
+
+    let userData: User;
+
+    if (!snapshot.exists()) {
+      userData = {
+        id: uid,
+        name,
+        email,
+        ball: 0,
+      };
+      await userRef.set(userData);
+      console.log("✅ Firestore에 신규 유저 등록됨:", userData);
+    } else {
+      userData = snapshot.data() as User;
+      console.log("✅ 기존 유저 불러옴:", userData);
+    }
+
+    return userData;
   } catch (error: any) {
     if (isErrorWithCode(error)) {
       switch (error.code) {
