@@ -1,50 +1,26 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { Animated, PanResponder, View, StyleSheet, Image } from "react-native";
 import LottieView from "lottie-react-native";
-import { Audio } from "expo-av";
+import { useGame } from "@/hooks/useGame";
+import GameResultPopup from "./GameResultPopup";
+import { useAuthStore } from "@/stores/authStore";
 
 export default function ThrowBallPlay() {
   const ballY = useRef(new Animated.Value(0)).current;
-  const [hit, setHit] = useState(false);
   const lottieRef = useRef<LottieView>(null);
+  const { throwBall } = useGame(lottieRef, ballY);
+  const { user } = useAuthStore();
 
-  const playThrowSound = async () => {
-    const { sound } = await Audio.Sound.createAsync(
-      require("../../assets/sounds/ballThrow.mp3")
-    );
-    await sound.playAsync();
-  };
-
-  const playSuccessSound = async () => {
-    const { sound } = await Audio.Sound.createAsync(
-      require("../../assets/sounds/success.mp3")
-    );
-    await sound.playAsync();
-  };
-
-  const playFailssSound = async () => {
-    const { sound } = await Audio.Sound.createAsync(
-      require("../../assets/sounds/fail.mp3")
-    );
-    await sound.playAsync();
+  const handleReset = () => {
+    ballY.setValue(0);
+    lottieRef.current?.reset();
   };
 
   const panResponder = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onPanResponderRelease: (_, gesture) => {
-        if (gesture.dy < -100) {
-          playThrowSound(); // 🎵 효과음 재생
-          Animated.timing(ballY, {
-            toValue: -400,
-            duration: 100,
-            useNativeDriver: true,
-          }).start(() => {
-            setHit(true);
-            lottieRef.current?.reset();
-            lottieRef.current?.play();
-          });
-        }
+        if (gesture.dy < -100) throwBall(user?.id || "");
       },
     })
   ).current;
@@ -57,17 +33,9 @@ export default function ThrowBallPlay() {
           source={require("../../assets/animations/gift_lottie.json")}
           autoPlay={false}
           loop={false}
-          onAnimationFinish={() => {
-            ballY.setValue(0);
-            setHit(false);
-            // playSuccessSound(); // 🎵 효과음 재생
-            lottieRef.current?.reset();
-            playFailssSound();
-          }}
           style={styles.lottie}
         />
       </View>
-
       <Animated.View
         {...panResponder.panHandlers}
         style={[styles.ball, { transform: [{ translateY: ballY }] }]}
@@ -78,6 +46,8 @@ export default function ThrowBallPlay() {
           resizeMode="contain"
         />
       </Animated.View>
+
+      <GameResultPopup onReset={handleReset} />
     </View>
   );
 }
@@ -89,7 +59,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   boxWrapper: {
-    marginTop: 100,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -101,6 +70,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 60,
     left: "50%",
-    marginLeft: -10,
+    marginLeft: -15,
   },
 });
