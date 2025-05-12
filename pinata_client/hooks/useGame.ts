@@ -10,7 +10,7 @@ export function useGame(
   ballY: Animated.Value
 ) {
   const { setResult } = useGameStore();
-  const { user, decreaseBall } = useAuthStore();
+  const { user, setUser, decreaseBall } = useAuthStore();
 
   const playSound = async (file: any) => {
     const { sound } = await Audio.Sound.createAsync(file);
@@ -39,6 +39,11 @@ export function useGame(
       const res: ThrowBallResponse = await throwBallRequest(userId);
       console.log("🎯 서버 응답:", res);
       setResult(res);
+
+      // 🔁 서버의 updatedBall이 있으면 동기화
+      if (res.updatedBall !== undefined && user) {
+        setUser({ ...user, ball: res.updatedBall });
+      }
 
       if (res.success) {
         await playSound(require("@/assets/sounds/success.mp3"));

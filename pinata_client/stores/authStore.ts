@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { User } from "@/types/user"; // ✅ 확장된 User 타입
+import type { User } from "@/types/user";
 
 interface AuthState {
   isLoggedIn: boolean;
