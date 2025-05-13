@@ -74,3 +74,21 @@ export const signOutFromGoogle = async () => {
     throw error;
   }
 };
+
+export const refreshUserFromFirestore = async (
+  uid: string
+): Promise<User | null> => {
+  try {
+    const snapshot = await firestore().collection("users").doc(uid).get();
+    if (!snapshot.exists) {
+      console.warn("❌ Firestore에 유저 정보 없음");
+      return null;
+    }
+
+    const user = snapshot.data() as User;
+    return user;
+  } catch (error) {
+    console.error("❌ Firestore 유저 정보 가져오기 실패:", error);
+    throw error;
+  }
+};
