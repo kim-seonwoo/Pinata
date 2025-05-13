@@ -1,13 +1,14 @@
 import { throwBallRequest } from "@/services/gameService";
 import { useGameStore } from "@/stores/gameStore";
-import { useAuthStore } from "@/stores/authStore"; // ✅ 공 관리용
+import { useAuthStore } from "@/stores/authStore";
 import { ThrowBallResponse } from "@/types/throwBallResponse";
 import { Audio } from "expo-av";
 import { Animated, Alert } from "react-native";
 
 export function useGame(
   lottieRef: React.RefObject<any>,
-  ballY: Animated.Value
+  ballY: Animated.Value,
+  boxX: Animated.Value // ✅ 추가된 box 위치 값
 ) {
   const { setResult } = useGameStore();
   const { user, setUser, decreaseBall } = useAuthStore();
@@ -24,8 +25,8 @@ export function useGame(
       return;
     }
 
-    // 🎯 공 차감
-    decreaseBall();
+    const hit = Math.abs((boxX as any).__getValue()) < 50;
+
     await playSound(require("@/assets/sounds/ballThrow.mp3"));
 
     Animated.timing(ballY, {
@@ -36,17 +37,18 @@ export function useGame(
       lottieRef.current?.reset();
       lottieRef.current?.play();
 
-      const res: ThrowBallResponse = await throwBallRequest(userId);
+      const res = await throwBallRequest(userId, hit);
       console.log("🎯 서버 응답:", res);
       setResult(res);
 
-      // 🔁 서버의 updatedBall이 있으면 동기화
       if (res.updatedBall !== undefined && user) {
         setUser({ ...user, ball: res.updatedBall });
       }
 
       if (res.success) {
         await playSound(require("@/assets/sounds/success.mp3"));
+      } else if (res.reason === "miss") {
+        await playSound(require("@/assets/sounds/miss.mp3"));
       } else {
         await playSound(require("@/assets/sounds/fail.mp3"));
       }

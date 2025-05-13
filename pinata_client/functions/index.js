@@ -5,7 +5,7 @@ admin.initializeApp();
 const db = admin.firestore();
 
 exports.throwBall = functions.https.onRequest(async (req, res) => {
-  const { userId } = req.body;
+  const { userId, hit } = req.body;
 
   if (!userId) {
     return res.status(400).json({ success: false, reason: "no_user_id" });
@@ -30,6 +30,15 @@ exports.throwBall = functions.https.onRequest(async (req, res) => {
   await userRef.update({
     ball: admin.firestore.FieldValue.increment(-1),
   });
+
+  // ❌ 1.5 MISS 판정 처리
+  if (hit === false) {
+    return res.json({
+      success: false,
+      reason: "miss",
+      updatedBall: currentBall - 1,
+    });
+  }
 
   // ✅ 2. 확률 설정값 가져오기
   const configSnap = await db.collection("luck").doc("config").get();
@@ -87,6 +96,6 @@ exports.throwBall = functions.https.onRequest(async (req, res) => {
     success: true,
     name: gift.name,
     imageUrl: gift.imageUrl,
-    updatedBall: currentBall - 1, // 🔄 클라이언트에서 store 업데이트 가능
+    updatedBall: currentBall - 1,
   });
 });

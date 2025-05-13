@@ -1,4 +1,4 @@
-import { View, Text, Modal, Image, StyleSheet, Pressable } from "react-native";
+import { View, Text, Modal, Image, StyleSheet } from "react-native";
 import { useGameStore } from "@/stores/gameStore";
 import CommonButton from "../CommonButton";
 
@@ -11,22 +11,32 @@ export default function GameResultPopup({ onReset }: Props) {
 
   if (!result) return null;
 
+  const renderContent = () => {
+    if (result.success) {
+      return (
+        <>
+          <Image
+            source={{ uri: result.imageUrl }}
+            style={styles.image}
+            resizeMode="contain"
+          />
+          <Text style={styles.text}>🎉 {result.name} 당첨!</Text>
+        </>
+      );
+    }
+
+    if (result.reason === "miss") {
+      return <Text style={styles.text}>🎯 박스를 맞추지 못했습니다!</Text>;
+    }
+
+    return <Text style={styles.text}>❌ 꽝! 다음 기회에...</Text>;
+  };
+
   return (
     <Modal transparent animationType="fade" visible>
       <View style={styles.overlay}>
         <View style={styles.popup}>
-          {result.success ? (
-            <>
-              <Image
-                source={{ uri: result.imageUrl }}
-                style={styles.image}
-                resizeMode="contain"
-              />
-              <Text style={styles.text}>🎉 {result.name} 당첨!</Text>
-            </>
-          ) : (
-            <Text style={styles.text}>❌ 꽝! 다음 기회에...</Text>
-          )}
+          {renderContent()}
           <CommonButton
             title="확인"
             onPress={() => {
@@ -63,15 +73,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
     marginBottom: 20,
-  },
-  button: {
-    backgroundColor: "#4CAF50",
-    paddingVertical: 10,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-  },
-  buttonText: {
-    color: "white",
-    fontWeight: "bold",
+    textAlign: "center",
   },
 });

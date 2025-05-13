@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Animated, PanResponder, View, StyleSheet, Image } from "react-native";
 import LottieView from "lottie-react-native";
 import { useGame } from "@/hooks/useGame";
@@ -8,8 +8,31 @@ import { useAuthStore } from "@/stores/authStore";
 export default function ThrowBallPlay() {
   const ballY = useRef(new Animated.Value(0)).current;
   const lottieRef = useRef<LottieView>(null);
-  const { throwBall } = useGame(lottieRef, ballY);
+  const boxX = useRef(new Animated.Value(0)).current;
+  const { throwBall } = useGame(lottieRef, ballY, boxX);
   const { user } = useAuthStore();
+
+  useEffect(() => {
+    const animateBox = () => {
+      const distance = Math.random() * 150 + 50; // 이동 범위 (50 ~ 200px)
+      const duration = Math.random() * 1000 + 1000; // 속도 (1 ~ 2초)
+
+      Animated.sequence([
+        Animated.timing(boxX, {
+          toValue: distance,
+          duration,
+          useNativeDriver: false,
+        }),
+        Animated.timing(boxX, {
+          toValue: -distance,
+          duration,
+          useNativeDriver: false,
+        }),
+      ]).start(() => animateBox()); // 반복
+    };
+
+    animateBox();
+  }, []);
 
   const handleReset = () => {
     ballY.setValue(0);
@@ -27,7 +50,9 @@ export default function ThrowBallPlay() {
 
   return (
     <View style={styles.playContainer}>
-      <View style={styles.boxWrapper}>
+      <Animated.View
+        style={[styles.boxWrapper, { transform: [{ translateX: boxX }] }]}
+      >
         <LottieView
           ref={lottieRef}
           source={require("../../assets/animations/gift_lottie.json")}
@@ -35,7 +60,7 @@ export default function ThrowBallPlay() {
           loop={false}
           style={styles.lottie}
         />
-      </View>
+      </Animated.View>
       <Animated.View
         {...panResponder.panHandlers}
         style={[styles.ball, { transform: [{ translateY: ballY }] }]}
