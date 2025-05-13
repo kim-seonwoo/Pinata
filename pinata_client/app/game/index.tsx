@@ -12,9 +12,7 @@ export default function GameView() {
 
   return (
     <BaseLayout>
-      {/* ✅ 남은 공 수 표시 */}
       <Text style={styles.ballCount}>🎾 {ball}</Text>
-
       <ThrowBallPlay />
       <CommonButton title="게임 종료하기" onPress={() => router.back()} />
     </BaseLayout>

@@ -8,7 +8,7 @@ import { Animated, Alert } from "react-native";
 export function useGame(
   lottieRef: React.RefObject<any>,
   ballY: Animated.Value,
-  boxX: Animated.Value // ✅ 추가된 box 위치 값
+  boxX: Animated.Value
 ) {
   const { setResult } = useGameStore();
   const { user, setUser, decreaseBall } = useAuthStore();
@@ -16,7 +16,24 @@ export function useGame(
   const playSound = async (file: any) => {
     const { sound } = await Audio.Sound.createAsync(file);
     await sound.playAsync();
-    // await sound.unloadAsync();
+  };
+
+  const isHit = () => Math.abs((boxX as any).__getValue()) < 50;
+
+  const handleResult = async (res: ThrowBallResponse) => {
+    setResult(res);
+
+    if (res.updatedBall !== undefined && user) {
+      setUser({ ...user, ball: res.updatedBall });
+    }
+
+    if (res.success) {
+      await playSound(require("@/assets/sounds/success.mp3"));
+    } else if (res.reason === "miss") {
+      await playSound(require("@/assets/sounds/miss.mp3"));
+    } else {
+      await playSound(require("@/assets/sounds/fail.mp3"));
+    }
   };
 
   const throwBall = async (userId: string) => {
@@ -25,7 +42,7 @@ export function useGame(
       return;
     }
 
-    const hit = Math.abs((boxX as any).__getValue()) < 50;
+    const hit = isHit();
 
     await playSound(require("@/assets/sounds/ballThrow.mp3"));
 
@@ -39,19 +56,8 @@ export function useGame(
 
       const res = await throwBallRequest(userId, hit);
       console.log("🎯 서버 응답:", res);
-      setResult(res);
 
-      if (res.updatedBall !== undefined && user) {
-        setUser({ ...user, ball: res.updatedBall });
-      }
-
-      if (res.success) {
-        await playSound(require("@/assets/sounds/success.mp3"));
-      } else if (res.reason === "miss") {
-        await playSound(require("@/assets/sounds/miss.mp3"));
-      } else {
-        await playSound(require("@/assets/sounds/fail.mp3"));
-      }
+      await handleResult(res);
     });
   };
 
