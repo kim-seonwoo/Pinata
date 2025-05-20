@@ -74,3 +74,50 @@ export const signOutFromGoogle = async () => {
     throw error;
   }
 };
+
+export const refreshUserFromFirestore = async (
+  uid: string
+): Promise<User | null> => {
+  try {
+    const snapshot = await firestore().collection("users").doc(uid).get();
+    if (!snapshot.exists) {
+      console.warn("❌ Firestore에 유저 정보 없음");
+      return null;
+    }
+
+    const user = snapshot.data() as User;
+    return user;
+  } catch (error) {
+    console.error("❌ Firestore 유저 정보 가져오기 실패:", error);
+    throw error;
+  }
+};
+
+// authService.ts 내부에 추가
+export const rewardUserWithBall = async (
+  uid: string,
+  amount: number = 10
+): Promise<User | null> => {
+  const userRef = firestore().collection("users").doc(uid);
+
+  try {
+    await firestore().runTransaction(async (transaction) => {
+      const snapshot = await transaction.get(userRef);
+      if (!snapshot.exists) {
+        throw new Error("유저 문서가 존재하지 않음");
+      }
+
+      const currentBall = snapshot.data()?.ball ?? 0;
+      const newBall = currentBall + amount;
+
+      transaction.update(userRef, { ball: newBall });
+    });
+
+    // 보상 후 유저 정보 최신화
+    const updatedSnapshot = await userRef.get();
+    return updatedSnapshot.data() as User;
+  } catch (error) {
+    console.error("❌ 공 보상 실패:", error);
+    throw error;
+  }
+};

@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "pinata_client",
+    "name": "박터트리기",
     "slug": "pinata_client",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -20,7 +20,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
@@ -30,7 +30,7 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/icon.png"
     },
     "plugins": [
       "expo-router",
@@ -42,9 +42,15 @@
             "useFrameworks": "static"
           }
         }
+      ],
+      [
+        "react-native-google-mobile-ads",
+        {
+          "androidAppId": "ca-app-pub-8132109935097205~2553171795",
+          "iosAppId": "ca-app-pub-8132109935097205~6908199832"
+        }
       ]
     ],
-
     "experiments": {
       "typedRoutes": true
     }

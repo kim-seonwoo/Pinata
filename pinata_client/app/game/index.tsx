@@ -1,7 +1,6 @@
 import { Text, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import BaseLayout from "@/components/ScreenContainer";
-import typography from "@/constants/typography";
 import CommonButton from "@/components/CommonButton";
 import ThrowBallPlay from "@/components/game/ThrowBallPlay";
 import { useAuthStore } from "@/stores/authStore";
