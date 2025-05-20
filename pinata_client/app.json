@@ -42,9 +42,15 @@
             "useFrameworks": "static"
           }
         }
+      ],
+      [
+        "react-native-google-mobile-ads",
+        {
+          "androidAppId": "ca-app-pub-8132109935097205~2553171795",
+          "iosAppId": "ca-app-pub-8132109935097205~6908199832"
+        }
       ]
     ],
-
     "experiments": {
       "typedRoutes": true
     }

@@ -16,10 +16,6 @@
     <string>6.0</string>
     <key>CFBundleName</key>
     <string>$(PRODUCT_NAME)</string>
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>이미지를 갤러리에 저장하기 위해 접근 권한이 필요합니다.</string>
-    <key>NSPhotoLibraryAddUsageDescription</key>
-    <string>이미지를 저장하기 위해 사진 라이브러리에 접근합니다.</string>
     <key>CFBundlePackageType</key>
     <string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
     <key>CFBundleShortVersionString</key>
@@ -44,6 +40,10 @@
     </array>
     <key>CFBundleVersion</key>
     <string>1</string>
+    <key>GADApplicationIdentifier</key>
+    <string>ca-app-pub-8132109935097205~6908199832</string>
+    <key>GADDelayAppMeasurementInit</key>
+    <false/>
     <key>LSMinimumSystemVersion</key>
     <string>12.0</string>
     <key>LSRequiresIPhoneOS</key>
@@ -55,6 +55,12 @@
       <key>NSAllowsLocalNetworking</key>
       <true/>
     </dict>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Allow $(PRODUCT_NAME) to access your microphone</string>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>Allow $(PRODUCT_NAME) to save photos</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Allow $(PRODUCT_NAME) to access your photos</string>
     <key>NSUserActivityTypes</key>
     <array>
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>

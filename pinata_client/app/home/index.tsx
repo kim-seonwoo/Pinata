@@ -18,6 +18,8 @@ import { useGoogleAuth } from "@/hooks/useGoogleLogin";
 import CommonButton from "@/components/CommonButton";
 import BaseLayout from "@/components/ScreenContainer";
 import typography from "@/constants/typography";
+import { BannerAd } from "react-native-google-mobile-ads";
+import BannerAdComponent from "@/components/ad/BannerAd";
 
 export default function HomeView() {
   const router = useRouter();
@@ -119,9 +121,14 @@ export default function HomeView() {
             buttonStyle={{ marginBottom: 12 }}
           />
           <CommonButton title="로그아웃" onPress={logout} size="large" />
+          <CommonButton
+            title="공 얻으러 가기"
+            onPress={earnBall}
+            size="large"
+          />
         </View>
       </View>
-
+      <BannerAdComponent />
       {/* 확대 이미지 모달 */}
       <Modal visible={modalVisible} transparent={true} animationType="fade">
         <View style={styles.modalOverlay}>
