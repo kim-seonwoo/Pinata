@@ -2,14 +2,15 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import { BannerAd, BannerAdSize } from "react-native-google-mobile-ads";
+import { getBannerAdUnitId } from "../util/adUnitId";
 
 export default function BannerAdComponent() {
-  const testAdUnitId = "ca-app-pub-8132109935097205/5275538050"; // 고정 크기 배너 테스트용
+  const adUnitId = getBannerAdUnitId();
 
   return (
     <View style={styles.container}>
       <BannerAd
-        unitId={testAdUnitId}
+        unitId={adUnitId ?? ""}
         size={BannerAdSize.FULL_BANNER}
         requestOptions={{
           requestNonPersonalizedAdsOnly: true,

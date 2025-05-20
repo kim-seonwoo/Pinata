@@ -4,6 +4,7 @@ import typography from "@/constants/typography";
 import BaseLayout from "@/components/ScreenContainer";
 import spacing from "@/constants/spacing";
 import { useGoogleAuth } from "@/hooks/useGoogleLogin";
+import colors from "@/constants/Colors";
 
 export default function LoginView() {
   const { login } = useGoogleAuth();
@@ -13,7 +14,7 @@ export default function LoginView() {
       <View style={styles.container}>
         <Text style={[typography.h1, styles.title]}>🎉 박터뜨리기 🎉</Text>
         <Text style={typography.h4}>공을 던져서 박터뜨리기!</Text>
-        <Text style={typography.h4}>구글 계정으로 로그인 해주세요</Text>
+        <Text style={typography.h4}>기프티콘을 획득해보세요!</Text>
         <Image
           source={require("@/assets/images/icon.png")}
           style={styles.logo}
@@ -44,6 +45,7 @@ const styles = StyleSheet.create({
   },
   title: {
     marginBottom: spacing.m,
+    color: colors.secondaryPurple,
   },
   googleButton: {
     width: "100%",
