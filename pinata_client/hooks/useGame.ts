@@ -47,7 +47,7 @@ export function useGame(
     await playSound(require("@/assets/sounds/ballThrow.mp3"));
 
     Animated.timing(ballY, {
-      toValue: -400,
+      toValue: -1000,
       duration: 100,
       useNativeDriver: true,
     }).start(async () => {
