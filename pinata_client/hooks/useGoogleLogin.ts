@@ -5,6 +5,7 @@ import {
   signOutFromGoogle,
   refreshUserFromFirestore,
 } from "@/services/authService";
+import auth from "@react-native-firebase/auth";
 
 export function useGoogleAuth() {
   const setUser = useAuthStore((state) => state.setUser);
@@ -31,16 +32,18 @@ export function useGoogleAuth() {
   };
 
   const refresh = async () => {
-    if (!user) {
-      console.warn("❌ 유저 없음: 로그인 필요");
-      return;
-    }
-
     try {
-      const updatedUser = await refreshUserFromFirestore(user.id);
+      const firebaseUser = auth().currentUser;
+
+      if (!firebaseUser) {
+        console.warn("❌ Firebase 로그인 정보 없음");
+        return;
+      }
+
+      const updatedUser = await refreshUserFromFirestore(firebaseUser.uid);
       if (updatedUser) {
         setUser(updatedUser);
-        console.log("✅ 유저 정보 새로고침 성공");
+        console.log("✅ Firebase + Firestore 유저 정보 동기화 성공");
       }
     } catch (e) {
       console.error("❌ 유저 정보 새로고침 실패:", e);
