@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image } from "react-native";
+import { Alert, View, Text, StyleSheet, Image } from "react-native";
 import { GoogleSigninButton } from "@react-native-google-signin/google-signin";
 import typography from "@/constants/typography";
 import BaseLayout from "@/components/ScreenContainer";
@@ -7,6 +7,23 @@ import { useGoogleAuth } from "@/hooks/useGoogleLogin";
 
 export default function LoginView() {
   const { login } = useGoogleAuth();
+
+  const handleConsentAndLogin = () => {
+    Alert.alert(
+      "개인정보 수집 안내",
+      "Google 로그인을 통해 이름과 이메일 주소를 수집하며, 이는 사용자 인증 및 게임 데이터 저장에 사용됩니다. 수집된 정보는 외부에 제공되지 않으며, 언제든지 삭제를 요청할 수 있습니다.",
+      [
+        {
+          text: "취소",
+          style: "cancel",
+        },
+        {
+          text: "동의하고 계속",
+          onPress: login,
+        },
+      ]
+    );
+  };
 
   return (
     <BaseLayout backgroundImage={require("@/assets/images/homeBack.png")}>
@@ -20,14 +37,11 @@ export default function LoginView() {
         <Text style={[typography.body, styles.slogan]}>
           공을 던져서 박터뜨리기!
         </Text>
-        <Text style={[typography.body, styles.slogan]}>
-          기프티콘을 획득해보세요!
-        </Text>
         <GoogleSigninButton
           style={styles.googleButton}
           size={GoogleSigninButton.Size.Wide}
           color={GoogleSigninButton.Color.Dark}
-          onPress={login}
+          onPress={handleConsentAndLogin}
         />
       </View>
     </BaseLayout>

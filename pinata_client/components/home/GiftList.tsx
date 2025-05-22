@@ -25,7 +25,7 @@ export default function GiftList({ gifts }: GiftListProps) {
 
   return (
     <View>
-      <Text style={[typography.body, { marginTop: 20 }]}>🎁 받은 선물</Text>
+      <Text style={[typography.body, { marginTop: 20 }]}>🎁 획득한 이미지</Text>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
