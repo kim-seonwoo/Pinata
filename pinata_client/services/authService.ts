@@ -6,10 +6,75 @@ import {
   isErrorWithCode,
 } from "@react-native-google-signin/google-signin";
 import type { User } from "../types/user";
+import appleAuth from "@invertase/react-native-apple-authentication";
 
 GoogleSignin.configure({
   webClientId: process.env.EXPO_PUBLIC_WEB_CLIENT_ID,
 });
+
+export async function signInWithApple(): Promise<User> {
+  try {
+    const appleAuthRequestResponse = await appleAuth.performRequest({
+      requestedOperation: appleAuth.Operation.LOGIN,
+      requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+    });
+
+    const { identityToken, nonce, email, fullName } = appleAuthRequestResponse;
+
+    if (!identityToken) {
+      throw new Error("Apple 로그인 실패: 토큰 없음");
+    }
+
+    const appleCredential = auth.AppleAuthProvider.credential(
+      identityToken,
+      nonce
+    );
+
+    const userCredential = await auth().signInWithCredential(appleCredential);
+    const firebaseUser = userCredential.user;
+    const uid = firebaseUser.uid;
+
+    // ✅ name과 email을 appleAuth 응답에서 직접 확보
+    const fallbackEmail = firebaseUser.email ?? "박터트리기";
+    const fallbackName = firebaseUser.displayName ?? "박터트리기";
+
+    const finalEmail = email ?? fallbackEmail;
+    const finalName =
+      fullName?.familyName && fullName?.givenName
+        ? `${fullName.familyName}${fullName.givenName}`
+        : fallbackName;
+
+    console.log("🍎 Apple 로그인 유저 정보:", {
+      uid,
+      finalEmail,
+      finalName,
+    });
+
+    const userRef = firestore().collection("users").doc(uid);
+    const snapshot = await userRef.get();
+
+    let userData: User;
+
+    if (!snapshot.exists()) {
+      userData = {
+        id: uid,
+        name: finalName,
+        email: finalEmail,
+        ball: 10,
+      };
+      await userRef.set(userData);
+      console.log("✅ Firestore에 신규 유저 등록됨:", userData);
+    } else {
+      userData = snapshot.data() as User;
+      console.log("✅ 기존 유저 불러옴:", userData);
+    }
+
+    return userData;
+  } catch (e) {
+    console.error("Apple 로그인 실패", e);
+    throw e;
+  }
+}
 
 export const signInWithGoogle = async (): Promise<User> => {
   try {
@@ -23,8 +88,8 @@ export const signInWithGoogle = async (): Promise<User> => {
     const firebaseUser = userCredential.user;
 
     const uid = firebaseUser.uid;
-    const email = firebaseUser.email ?? "";
-    const name = firebaseUser.displayName ?? "";
+    const email = firebaseUser.email ?? "박터트리기";
+    const name = firebaseUser.displayName ?? "박터트리기";
 
     const userRef = firestore().collection("users").doc(uid);
     const snapshot = await userRef.get();
@@ -36,7 +101,7 @@ export const signInWithGoogle = async (): Promise<User> => {
         id: uid,
         name,
         email,
-        ball: 0,
+        ball: 10,
       };
       await userRef.set(userData);
       console.log("✅ Firestore에 신규 유저 등록됨:", userData);

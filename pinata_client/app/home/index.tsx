@@ -41,7 +41,7 @@ export default function HomeView() {
   const { show: showRewardAd } = useRewardedAd(onReward);
 
   return (
-    <BaseLayout>
+    <BaseLayout backgroundImage={require("@/assets/images/homeBack.png")}>
       <View style={styles.container}>
         <ScrollView contentContainerStyle={styles.scrollContent}>
           {user && (

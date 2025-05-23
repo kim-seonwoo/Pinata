@@ -1,13 +1,10 @@
 import { useAuthStore } from "@/stores/authStore";
 import { useRouter } from "expo-router";
-import {
-  signInWithGoogle,
-  signOutFromGoogle,
-  refreshUserFromFirestore,
-} from "@/services/authService";
+import { signInWithApple } from "@/services/authService";
 import auth from "@react-native-firebase/auth";
+import { refreshUserFromFirestore } from "@/services/authService";
 
-export function useGoogleAuth() {
+export function useAppleAuth() {
   const setUser = useAuthStore((state) => state.setUser);
   const clearUser = useAuthStore((state) => state.clearUser);
   const user = useAuthStore((state) => state.user);
@@ -15,19 +12,19 @@ export function useGoogleAuth() {
 
   const login = async () => {
     try {
-      const user = await signInWithGoogle();
+      const user = await signInWithApple();
       setUser(user);
     } catch (e) {
-      console.error("❌ 로그인 실패:", e);
+      console.error("❌ Apple 로그인 실패:", e);
     }
   };
 
   const logout = async () => {
     try {
-      await signOutFromGoogle();
+      await auth().signOut();
       clearUser();
     } catch (e) {
-      console.error("❌ 로그아웃 실패:", e);
+      console.error("❌ Apple 로그아웃 실패:", e);
     }
   };
 
@@ -43,7 +40,7 @@ export function useGoogleAuth() {
       const updatedUser = await refreshUserFromFirestore(firebaseUser.uid);
       if (updatedUser) {
         setUser(updatedUser);
-        console.log("✅ Firebase + Firestore 유저 정보 동기화 성공");
+        console.log("✅ Apple 유저 정보 동기화 성공");
       }
     } catch (e) {
       console.error("❌ 유저 정보 새로고침 실패:", e);

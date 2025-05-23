@@ -8,13 +8,14 @@ import {
 } from "react-native-google-mobile-ads";
 import CommonButton from "@/components/CommonButton";
 import { useAuthStore } from "@/stores/authStore";
+import { getRewardAdUnitId } from "../util/adUnitId";
 
 export default function RewardedAdView() {
-  const { user, setUser } = useAuthStore();
+  const adId = getRewardAdUnitId() ?? TestIds.REWARDED;
 
   const [loaded, setLoaded] = useState(false);
   const rewarded = useRef<RewardedAd>(
-    RewardedAd.createForAdRequest(TestIds.REWARDED, {
+    RewardedAd.createForAdRequest(adId, {
       requestNonPersonalizedAdsOnly: true,
     })
   ).current;

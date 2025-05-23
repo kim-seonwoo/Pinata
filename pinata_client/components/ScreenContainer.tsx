@@ -7,6 +7,8 @@ import {
   ViewStyle,
   ViewProps,
   View,
+  ImageBackground,
+  ImageSourcePropType,
 } from "react-native";
 
 interface BaseLayoutProps extends ViewProps {
@@ -14,6 +16,7 @@ interface BaseLayoutProps extends ViewProps {
   style?: ViewStyle;
   noPadding?: boolean;
   backgroundColor?: string;
+  backgroundImage?: ImageSourcePropType; // ✅ 추가: 배경 이미지 prop
 }
 
 const BaseLayout = ({
@@ -21,16 +24,29 @@ const BaseLayout = ({
   style,
   noPadding = false,
   backgroundColor = colors.bgWhite,
+  backgroundImage,
   ...props
 }: BaseLayoutProps) => {
-  return (
+  const Container = (
+    <View
+      style={[styles.container, noPadding && styles.noPadding, style]}
+      {...props}
+    >
+      {children}
+    </View>
+  );
+
+  return backgroundImage ? (
+    <ImageBackground
+      source={backgroundImage}
+      style={styles.imageBackground}
+      resizeMode="cover"
+    >
+      <SafeAreaView style={styles.safeArea}>{Container}</SafeAreaView>
+    </ImageBackground>
+  ) : (
     <SafeAreaView style={[styles.safeArea, { backgroundColor }]}>
-      <View
-        style={[styles.container, noPadding && styles.noPadding, style]}
-        {...props}
-      >
-        {children}
-      </View>
+      {Container}
     </SafeAreaView>
   );
 };
@@ -47,6 +63,9 @@ const styles = StyleSheet.create({
   noPadding: {
     paddingHorizontal: 0,
     paddingVertical: 0,
+  },
+  imageBackground: {
+    flex: 1,
   },
 });
 

@@ -5,7 +5,7 @@ export default function GameLayout() {
     <Stack>
       <Stack.Screen
         name="index"
-        options={{ title: "게임 화면", headerShown: true }}
+        options={{ headerShown: false }} // ✅ 헤더 제거
       />
     </Stack>
   );
