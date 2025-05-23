@@ -4,9 +4,24 @@ import typography from "@/constants/typography";
 import BaseLayout from "@/components/ScreenContainer";
 import spacing from "@/constants/spacing";
 import { useGoogleAuth } from "@/hooks/useGoogleLogin";
+import React from "react";
+import { AppleButton } from "@invertase/react-native-apple-authentication";
+import { useAppleAuth } from "@/hooks/useAppleLogin";
 
 export default function LoginView() {
-  const { login } = useGoogleAuth();
+  const { login: googleLogin } = useGoogleAuth();
+  const { login: appleLogin } = useAppleAuth();
+
+  const handleAppleConsentAndLogin = () => {
+    Alert.alert(
+      "개인정보 수집 안내",
+      "Apple 로그인을 통해 사용자 ID가 수집되며, 이는 인증 및 게임 데이터 저장에 사용됩니다.",
+      [
+        { text: "취소", style: "cancel" },
+        { text: "동의하고 계속", onPress: appleLogin },
+      ]
+    );
+  };
 
   const handleConsentAndLogin = () => {
     Alert.alert(
@@ -19,7 +34,7 @@ export default function LoginView() {
         },
         {
           text: "동의하고 계속",
-          onPress: login,
+          onPress: googleLogin,
         },
       ]
     );
@@ -42,6 +57,12 @@ export default function LoginView() {
           size={GoogleSigninButton.Size.Wide}
           color={GoogleSigninButton.Color.Dark}
           onPress={handleConsentAndLogin}
+        />
+        <AppleButton
+          buttonStyle={AppleButton.Style.BLACK}
+          buttonType={AppleButton.Type.SIGN_IN}
+          style={styles.appleButton}
+          onPress={handleAppleConsentAndLogin}
         />
       </View>
     </BaseLayout>
@@ -76,5 +97,11 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 48,
     marginTop: 80,
+  },
+
+  appleButton: {
+    width: "100%",
+    height: 48,
+    marginTop: 12,
   },
 });
