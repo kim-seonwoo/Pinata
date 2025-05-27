@@ -7,7 +7,6 @@ interface AuthState {
   setIsLoggedIn: (value: boolean) => void;
   setUser: (user: User) => void;
   clearUser: () => void;
-  decreaseBall: () => void;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -16,11 +15,4 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   setIsLoggedIn: (value) => set({ isLoggedIn: value }),
   setUser: (user) => set({ user, isLoggedIn: true }),
   clearUser: () => set({ user: null, isLoggedIn: false }),
-  decreaseBall: () => {
-    const user = get().user;
-    if (!user) return;
-
-    const newBall = Math.max((user.ball ?? 0) - 1, 0);
-    set({ user: { ...user, ball: newBall } });
-  },
 }));

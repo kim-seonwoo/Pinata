@@ -19,7 +19,7 @@ export default function Ball({ ballY, panHandlers }: Props) {
     >
       <Image
         source={require("../../assets/images/ball.png")}
-        style={{ width: 30, height: 30 }}
+        style={{ width: 50, height: 50 }}
         resizeMode="contain"
       />
     </Animated.View>

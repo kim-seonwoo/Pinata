@@ -11,7 +11,7 @@ export function useGame(
   boxX: Animated.Value
 ) {
   const { setResult } = useGameStore();
-  const { user, setUser, decreaseBall } = useAuthStore();
+  const { user, setUser } = useAuthStore();
 
   const playSound = async (file: any) => {
     const { sound } = await Audio.Sound.createAsync(file);
@@ -37,13 +37,15 @@ export function useGame(
   };
 
   const throwBall = async (userId: string) => {
-    if (!user || user.ball <= 0) {
+    const latestUser = useAuthStore.getState().user;
+
+    if (!latestUser || latestUser.ball <= 0) {
       Alert.alert("⚠️ 공이 부족합니다", "공을 충전해주세요!");
+
       return;
     }
 
     const hit = isHit();
-
     await playSound(require("@/assets/sounds/ballThrow.mp3"));
 
     Animated.timing(ballY, {

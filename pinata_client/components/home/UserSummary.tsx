@@ -15,7 +15,7 @@ export default function UserSummary({ user, onEarnBall }: UserSummaryProps) {
   return (
     <View>
       <Text style={typography.h3}>👤 {user.name}</Text>
-      <Text style={typography.h3}>🎾 보유한 공: {user.ball}개</Text>
+      <Text style={typography.h3}>🎾 {user.ball}</Text>
       <CommonButton
         title="공 얻으러 가기"
         onPress={onEarnBall}
